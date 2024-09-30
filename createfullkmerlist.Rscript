@@ -1,10 +1,37 @@
 #!/usr/bin/env Rscript
-options(error = quote({
-	dump.frames(to.file=TRUE, dumpto="Rcoredump")
-	load("Rcoredump.rda")
-	print(Rcoredump)
-	q()
-}))
+
+############################################
+#         Error handling function          #
+############################################
+
+# Old function -----------
+# options(error = quote({
+# 	dump.frames(to.file=TRUE, dumpto="Rcoredump")
+# 	load("Rcoredump.rda")
+# 	print(Rcoredump)
+# 	q()
+# }))
+
+
+# New function ------------
+# Courtesy of https://renkun.me/2020/03/31/a-simple-way-to-show-stack-trace-on-error-in-r/
+if(!interactive()) options(error = function() {
+  calls <- sys.calls()
+  if (length(calls) >= 2L) {
+    sink(stderr())
+    on.exit(sink(NULL))
+    cat("Backtrace:\n")
+    calls <- rev(calls[-length(calls)])
+    for (i in seq_along(calls)) {
+      cat(i, ": ", deparse(calls[[i]], nlines = 1L), "\n", sep = "")
+    }
+  }
+  coredump = paste0("coredump.",Sys.getpid(),".RData")
+  if(coredump!="") save.image(coredump)
+  if (!interactive()) {
+    q(status = 1)
+  }
+})
 
 
 help = c("createfullkmerlist.Rscript merge kmers into a list of unique kmers present across the dataset",
