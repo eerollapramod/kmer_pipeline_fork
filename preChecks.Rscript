@@ -1,0 +1,36 @@
+#!/usr/bin/env Rscript
+
+# ===================== Pre Checks for error catching ======================== #
+options(error = quote({
+  dump.frames(to.file=TRUE, dumpto="Rcoredump")
+  load("Rcoredump.rda")
+  print(Rcoredump)
+  q()
+}))
+help = paste(
+  "preChecks.Rscript Check for any possible errors before pipeline execution",
+  "Pramod Eerolla (2024)",
+  "",
+  "Usage: Rscript preChecks.Rscript fasta_file",
+  sep="\n")
+
+
+
+
+
+
+
+cd
+
+
+
+
+
+
+
+
+
+
+
+
+
